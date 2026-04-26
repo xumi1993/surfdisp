@@ -177,7 +177,7 @@ Generates `comparison.png` — six panels (Love/Rayleigh × fundamental/overtone
 × phase/group), each showing the C++ and Fortran dispersion curves overlaid,
 with a relative-difference residual panel below.
 
-![comparison](build/comparison.png)
+![comparison](docs/comparison.png)
 
 ---
 
