@@ -32,3 +32,42 @@ target_link_libraries(test_compare surfdisp_cpp surfdisp_f)
 add_executable(benchmark test/benchmark.cpp)
 target_include_directories(benchmark PRIVATE include)
 target_link_libraries(benchmark surfdisp_cpp surfdisp_f)
+
+# ---- constants Fortran module (shared by slegn and sregn) ----
+add_library(constants_f STATIC src/constants.f90)
+
+# ---- slegn C++ library ----
+add_library(slegn_cpp STATIC src/slegn.cpp)
+target_include_directories(slegn_cpp PUBLIC include)
+
+# ---- slegn Fortran library ----
+add_library(slegn_f STATIC src/slegn96.f90)
+target_link_libraries(slegn_f constants_f)
+
+# ---- slegn comparison test ----
+add_executable(test_slegn test/test_slegn.cpp)
+target_include_directories(test_slegn PRIVATE include)
+target_link_libraries(test_slegn slegn_cpp slegn_f constants_f surfdisp_cpp surfdisp_f)
+
+# ---- slegn benchmark ----
+add_executable(benchmark_slegn test/benchmark_slegn.cpp)
+target_include_directories(benchmark_slegn PRIVATE include)
+target_link_libraries(benchmark_slegn slegn_cpp slegn_f constants_f surfdisp_cpp surfdisp_f)
+
+# ---- sregn C++ library ----
+add_library(sregn_cpp STATIC src/sregn.cpp)
+target_include_directories(sregn_cpp PUBLIC include)
+
+# ---- sregn Fortran library ----
+add_library(sregn_f STATIC src/sregn96.f90 src/sregn96_fwrapper.f90)
+target_link_libraries(sregn_f constants_f)
+
+# ---- sregn comparison test ----
+add_executable(test_sregn test/test_sregn.cpp)
+target_include_directories(test_sregn PRIVATE include)
+target_link_libraries(test_sregn sregn_cpp sregn_f constants_f surfdisp_cpp surfdisp_f)
+
+# ---- sregn benchmark ----
+add_executable(benchmark_sregn test/benchmark_sregn.cpp)
+target_include_directories(benchmark_sregn PRIVATE include)
+target_link_libraries(benchmark_sregn sregn_cpp sregn_f constants_f surfdisp_cpp surfdisp_f)

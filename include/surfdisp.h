@@ -42,6 +42,18 @@ std::vector<double> dispersion(
     EarthModel  earth    = EarthModel::Flat
 );
 
+// Array-based overload: accepts separate float arrays for each parameter.
+// Avoids constructing a vector<Layer> when data is already in flat arrays.
+std::vector<double> dispersion(
+    int         nlayer,
+    const float* thk, const float* vp, const float* vs, const float* rho,
+    const std::vector<double>& periods_s,
+    WaveType    wave_type,
+    int         mode     = 0,
+    VelocityType vel_type = VelocityType::Phase,
+    EarthModel  earth    = EarthModel::Flat
+);
+
 } // namespace surfdisp
 
 /* ------------------------------------------------------------------ */

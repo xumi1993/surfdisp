@@ -867,4 +867,32 @@ std::vector<double> dispersion(
     return cg;
 }
 
+std::vector<double> dispersion(
+    int          nlayer,
+    const float* thk, const float* vp, const float* vs, const float* rho,
+    const std::vector<double>& periods_s,
+    WaveType     wave_type,
+    int          mode,
+    VelocityType vel_type,
+    EarthModel   earth)
+{
+    if (nlayer <= 0)
+        throw std::invalid_argument("surfdisp::dispersion: nlayer must be > 0");
+    if (periods_s.empty())
+        throw std::invalid_argument("surfdisp::dispersion: periods_s is empty");
+    if (mode < 0)
+        throw std::invalid_argument("surfdisp::dispersion: mode must be >= 0");
+
+    const int kmax   = static_cast<int>(periods_s.size());
+    const int iflsph = (earth     == EarthModel::Spherical) ? 1 : 0;
+    const int iwave  = (wave_type == WaveType::Rayleigh)    ? 2 : 1;
+    const int igr    = (vel_type  == VelocityType::Group)   ? 1 : 0;
+    const int imode  = mode + 1;
+
+    std::vector<double> cg(kmax, 0.0);
+    surfdisp96_cpp(thk, vp, vs, rho, nlayer, iflsph, iwave, imode, igr,
+                   kmax, periods_s.data(), cg.data());
+    return cg;
+}
+
 } // namespace surfdisp
